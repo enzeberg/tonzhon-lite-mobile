@@ -1,25 +1,87 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Layout } from 'antd';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import TheHeader from './components/Header';
+import SearchBar from './components/SearchBar';
+import Result from './components/Result';
+import SearchWithURL from './components/SearchWithURL';
+import NotFound from './components/NotFound';
+import TopSongs from './components/TopSongs';
+import Player from './components/Player';
+// import { themeColor } from '../../config';
+import { LoadingOutlined } from '@ant-design/icons';
+import './App.less';
+
+const { Header, Content } = Layout;
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let { searchStatus, searchResults } = this.props;
+    return (
+      <BrowserRouter>
+        <Layout>
+          <Switch>
+            <Route path="/search" component={SearchWithURL} />
+          </Switch>
+          <Header style={{ width: '100%', zIndex: 1040 }}>
+            <TheHeader />
+          </Header>
+          <Content>
+            <div
+              style={{
+                marginTop: 5,
+                padding: '10px',
+                marginBottom: 80,
+              }}
+            >
+              <div style={{ marginBottom: 10 }}>
+                <SearchBar />
+              </div>
+              <Switch>
+                <Route exact path="/" />
+                <Route path="/search" render={() => (
+                  <>
+                    <TopSongs />
+                    {
+                      Object.keys(searchResults).map((key) => (
+                        <Result
+                          result={searchResults[key]}
+                          provider={key}
+                          key={key} />
+                      ))
+                    }
+                    <div className="loading-anim-wrapper">
+                      {
+                        searchStatus === 'searching' &&
+                        <LoadingOutlined
+                          style={{ fontSize: 30, }}
+                        />
+                      }
+                    </div>
+                  </>
+                )} />
+                <Route path="/*" render={NotFound} />
+              </Switch>
+            </div>
+          </Content>
+          <Player />
+        </Layout>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    searchStatus: state.searchStatus,
+    searchResults: state.searchResults,
+  };
+}
+
+export default connect(mapStateToProps)(App);
