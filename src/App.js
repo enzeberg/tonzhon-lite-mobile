@@ -25,7 +25,7 @@ class App extends Component {
     let { searchStatus, searchResults } = this.props;
     return (
       <BrowserRouter>
-        <Layout style={{ backgroundColor: 'rgb(247,247,247' }}>
+        <Layout style={{ backgroundColor: 'rgb(235,235,235)' }}>
           <Switch>
             <Route path="/search" component={SearchWithURL} />
           </Switch>
