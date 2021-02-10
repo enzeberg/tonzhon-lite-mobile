@@ -1,40 +1,37 @@
 @import '~antd/dist/antd.less';
 
-.App {
-  text-align: center;
+.nowrap {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.loading-anim-wrapper {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.playlist::-webkit-scrollbar {
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  width: 8px;
+  border-radius: 10px;
+}
+.playlist::-webkit-scrollbar-thumb {
+    background-color: rgb(100, 100, 100);
+    border-radius: 10px;
+    width: 5px;
+}
+.playlist::-webkit-scrollbar-track {
+    display: none;
+    border-radius: 10px;
+}
+.playlist::-webkit-scrollbar-track-piece {
+    border-radius: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.player-icon {
+  color: black;
+  display: block;
+  font-size: 25px;
 }

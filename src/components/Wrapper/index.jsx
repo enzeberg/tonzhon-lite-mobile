@@ -3,7 +3,6 @@ import { Row, Col } from 'antd';
 
 import neteaseMusicLogo from './images/netease_16.ico';
 import qqMusicLogo from './images/qq_16.ico';
-import xiamiMusicLogo from './images/xiami_16.ico';
 import kuwoMusicLogo from '../../images/kuwo_16.ico';
 
 class Wrapper extends Component {
@@ -13,9 +12,15 @@ class Wrapper extends Component {
 
   render() {
     const { provider } = this.props;
-    const { themeColor, logo } = providers[provider];
+    const logo = logos[provider];
     return (
-      <div style={{ ...styles.wrapper, borderColor: themeColor }}>
+      <div style={{
+          borderRadius: 5,
+          padding: '10px',
+          marginBottom: 15,
+          backgroundColor: 'white',
+        }}
+      >
         <Row type="flex" align="middle">
           <Col span={2}>
             <img src={logo} alt={provider} />
@@ -33,33 +38,10 @@ class Wrapper extends Component {
   }
 }
 
-const styles = {
-  wrapper: {
-    border: '1px solid',
-    borderRadius: 5,
-    padding: '8px 8px 0',
-    marginBottom: 15,
-  },
-};
-
-const providers = {
-  netease: {
-    themeColor: '#C20C0C',
-    logo: neteaseMusicLogo,
-  },
-  qq: {
-    themeColor: '#2caf6f',
-    logo: qqMusicLogo,
-  },
-  xiami: {
-    themeColor: '#FA8723',
-    logo: xiamiMusicLogo,
-  },
-  kuwo: {
-    themeColor: '#ffe443',
-    logo: kuwoMusicLogo,
-  }
-
+const logos = {
+  qq: qqMusicLogo,
+  netease: neteaseMusicLogo,
+  kuwo: kuwoMusicLogo,
 };
 
 export default Wrapper;

@@ -23,7 +23,7 @@ class SearchBar extends Component {
 
     return (
       <Search
-        placeholder="歌曲/专辑/艺人"
+        placeholder="歌曲 | 专辑 | 艺人"
         defaultValue={ keyword || '' }
         onSearch={this.onSearch}
         enterButton

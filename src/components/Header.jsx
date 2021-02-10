@@ -26,7 +26,7 @@ class Header extends Component {
             }}
           >
             Tonzhon Lite
-              </h2>
+          </h2>
         </Link>
       </div>
     );

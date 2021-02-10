@@ -25,19 +25,26 @@ class App extends Component {
     let { searchStatus, searchResults } = this.props;
     return (
       <BrowserRouter>
-        <Layout>
+        <Layout style={{ backgroundColor: 'rgb(247,247,247' }}>
           <Switch>
             <Route path="/search" component={SearchWithURL} />
           </Switch>
-          <Header style={{ width: '100%', zIndex: 1040 }}>
+          <Header style={{
+              width: '100%',
+              zIndex: 1040,
+              position: 'fixed',
+              textAlign: 'center',
+            }}
+          >
             <TheHeader />
           </Header>
           <Content>
             <div
               style={{
-                marginTop: 5,
+                marginTop: 54,
                 padding: '10px',
                 marginBottom: 80,
+                minHeight: '800px',
               }}
             >
               <div style={{ marginBottom: 10 }}>

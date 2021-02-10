@@ -17,10 +17,8 @@ import {
 
 import PlayingList from './PlayingList';
 import { toMinAndSec } from '../utils/time_converter';
-import { musicPlayer } from '../config';
 import neteaseMusicLogo from '../images/netease_16.ico';
 import qqMusicLogo from '../images/qq_16.ico';
-import xiamiMusicLogo from '../images/xiami_16.ico';
 import kuwoMusicLogo from '../images/kuwo_16.ico';
 
 notification.config({
@@ -372,8 +370,9 @@ const styles = {
     bottom: 0,
     padding: '10px',
     width: '100%',
-    backgroundColor: musicPlayer.background,
-    color: musicPlayer.color,
+    // height: '77px',
+    background: '#222',
+    color: 'white',
     zIndex: 1001, // .ant-drawer's z-index = 1000
   },
 };
@@ -381,7 +380,6 @@ const styles = {
 const logos = {
   qq: qqMusicLogo,
   netease: neteaseMusicLogo,
-  xiami: xiamiMusicLogo,
   kuwo: kuwoMusicLogo,
 };
 

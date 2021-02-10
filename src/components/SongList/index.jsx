@@ -12,7 +12,11 @@ class SongList extends Component {
   render() {
     let { songs, showPlatform } = this.props;
     return (
-      <List>
+      <List
+        style={{
+          padding: 0
+        }}
+      >
         {
           songs.map(song => (
             <SongItem key={song.link} song={song} showPlatform={showPlatform} />
