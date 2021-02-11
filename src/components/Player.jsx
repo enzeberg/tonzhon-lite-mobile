@@ -237,18 +237,29 @@ class Player extends Component {
 
   render() {
     const { getMusicUrlStatus, playStatus } = this.state;
-    const { currentSong, playlist } = this.props;
+    const { currentSong } = this.props;
     const progress = toMinAndSec(this.state.playProgress);
     const total = toMinAndSec(this.state.songDuration);
     return (
-      <div style={styles.player} id="music-player">
+      <div style={{
+          position: 'fixed',
+          bottom: 0,
+          padding: '10px',
+          width: '100%',
+          // height: '77px',
+          background: '#222',
+          color: 'white',
+          zIndex: 1001, // .ant-drawer's z-index = 1000
+        }}
+        id="music-player"
+      >
         <audio
           src={this.state.songSource}
           ref={(audio) => { this.audio = audio; }}
         />
 
         <Drawer visible={this.state.playerDetailsVisible}
-          title={currentSong && currentSong.name}
+          // title={currentSong && currentSong.name}
           onCancel={this.handleCancel}
           // bodyStyle={{
           //   backgroundColor: 'rgba(100, 100, 100, 0.7)'
@@ -260,8 +271,10 @@ class Player extends Component {
           closable={false}
         >
           <div style={{ textAlign: 'right' }}>
-            {this.state.songLoaded ? `${progress} / ${total}` :
-              '00:00 / 00:00'}
+            {
+              this.state.songLoaded ? `${progress} / ${total}`
+              : '00:00 / 00:00'
+            }
           </div>
           <Slider min={0}
             max={this.state.songDuration ? parseInt(this.state.songDuration) : 0}
@@ -362,20 +375,6 @@ class Player extends Component {
     );
   }
 }
-
-
-const styles = {
-  player: {
-    position: 'fixed',
-    bottom: 0,
-    padding: '10px',
-    width: '100%',
-    // height: '77px',
-    background: '#222',
-    color: 'white',
-    zIndex: 1001, // .ant-drawer's z-index = 1000
-  },
-};
 
 const logos = {
   qq: qqMusicLogo,

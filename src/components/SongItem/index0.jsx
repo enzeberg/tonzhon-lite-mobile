@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import { List } from 'antd';
+import { ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 import neteaseMusicLogo from './images/netease_16.ico';
 import qqMusicLogo from './images/qq_16.ico';
+import xiamiMusicLogo from './images/xiami_16.ico';
 import kuwoMusicLogo from '../../images/kuwo_16.ico';
-
-const logos = {
-  qq: qqMusicLogo,
-  netease: neteaseMusicLogo,
-  kuwo: kuwoMusicLogo,
-};
 
 class SongItem extends Component {
   constructor(props) {
@@ -35,33 +30,44 @@ class SongItem extends Component {
 
   render() {
     let { song, currentSong, showPlatform } = this.props;
+    // let anchorClass = song.hasCopyright ? '' : 'no-copyright';
     const shouldPlay =
-      (!currentSong || currentSong.newId !== song.newId) ||
+      (!currentSong  || currentSong.newId !== song.newId) ||
       (currentSong.newId === song.newId && this.props.playAction === 'pause');
     return (
-      <List.Item
+      <ListItem button
         onClick={() => this.playOrPause(shouldPlay)}
         key={song.newId}
         style={{
-          padding: '10px 0',
+          // color: song.hasCopyright ? 'black' : '#aaa',
+          padding: 0,
         }}
       >
-        <List.Item.Meta title={song.name}
-          description={song.artists.map(artist => artist.name)
+        <ListItemText primary={song.name}
+          secondary={song.artists.map(artist => artist.name)
             .reduce((accumulator, currentValue) =>
               accumulator + ' / ' + currentValue
-            )}
+          )}
         />
         {
           showPlatform &&
-            <img src={logos[song.platform]} alt=""
-              style={{ width: 16, height: 16 }}
-            />
+            <ListItemIcon>
+              <img src={logos[song.platform]} alt=""
+                style={{ width: 16, height: 16 }}
+              />
+            </ListItemIcon>
         }
-      </List.Item>
+      </ListItem>
     );
   }
 }
+
+const logos = {
+  qq: qqMusicLogo,
+  netease: neteaseMusicLogo,
+  xiami: xiamiMusicLogo,
+  kuwo: kuwoMusicLogo,
+};
 
 function mapStateToProps(state) {
   return {

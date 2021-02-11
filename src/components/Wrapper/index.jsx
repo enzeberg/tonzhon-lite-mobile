@@ -17,7 +17,7 @@ class Wrapper extends Component {
       <div style={{
           borderRadius: 5,
           padding: '10px',
-          marginBottom: 15,
+          marginBottom: '10px',
           backgroundColor: 'white',
         }}
       >

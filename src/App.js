@@ -60,7 +60,8 @@ class App extends Component {
                         <Result
                           result={searchResults[key]}
                           provider={key}
-                          key={key} />
+                          key={key}
+                        />
                       ))
                     }
                     <div className="loading-anim-wrapper">
