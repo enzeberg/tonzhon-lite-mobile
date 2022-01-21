@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import querystring from 'querystring';
 
 class SearchWithURL extends Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   componentDidMount() {
     const { location, keywordFromStore } = this.props;
@@ -13,7 +13,7 @@ class SearchWithURL extends Component {
     // keyword in the store is encoded
     // querystring.parse() will decode URI component
     const { keyword } = querystring.parse(query);
-    console.log('keyword: ', keyword)
+    // console.log('keyword: ', keyword)
     if (keyword) {
       if (window.encodeURIComponent(keyword) !== keywordFromStore) {
         this.props.updateSearchKeyword(keyword);

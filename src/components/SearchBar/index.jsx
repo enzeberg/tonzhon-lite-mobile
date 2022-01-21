@@ -8,9 +8,10 @@ const Search = Input.Search;
 class SearchBar extends Component {
   constructor(props) {
     super(props);
+    this.onSearch = this.onSearch.bind(this);
   }
 
-  onSearch = (keyword) => {
+  onSearch(keyword) {
     if (keyword !== '' &&
         keyword !== this.props.keyword) {
       this.props.updateSearchKeyword(keyword);
@@ -46,5 +47,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(connect(mapStateToProps,
-                                  mapDispatchToProps)(SearchBar));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SearchBar));

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Slider, Button, notification, Tooltip, Drawer } from 'antd';
+import { Row, Col, Slider, Button, message, Tooltip, Drawer } from 'antd';
 import {
   StepBackwardOutlined,
   StepForwardOutlined,
@@ -20,12 +20,6 @@ import { toMinAndSec } from '../utils/time_converter';
 import neteaseMusicLogo from '../images/netease_16.ico';
 import qqMusicLogo from '../images/qq_16.ico';
 import kuwoMusicLogo from '../images/kuwo_16.ico';
-
-notification.config({
-  placement: 'bottomRight',
-  bottom: 50,
-  duration: 3,
-});
 
 const playModeIcons = {
   loop: <LoopIcon className="player-icon" />,
@@ -54,14 +48,12 @@ class Player extends Component {
       playerDetailsVisible: false,
       playingListVisible: false,
     };
+
     this.playOrPause = this.playOrPause.bind(this);
-    this.play = this.play.bind(this);
-    this.pause = this.pause.bind(this);
-    this.getSongSource = this.getSongSource.bind(this);
     this.changePlayProgress = this.changePlayProgress.bind(this);
-    this.playNext = this.playNext.bind(this);
     this.switchPlayMode = this.switchPlayMode.bind(this);
-    this.clickPlaylistBtn = this.clickPlaylistBtn.bind(this);
+    this.onPlaylistBtnClick = this.onPlaylistBtnClick.bind(this);
+    this.switchPlayerDetailsVisible = this.switchPlayerDetailsVisible.bind(this);
   }
 
   componentDidMount() {
@@ -136,7 +128,8 @@ class Player extends Component {
       this.pause();
     }
   }
-  getSongSourceAndPlay = (song) => {
+
+  getSongSourceAndPlay(song) {
     this.getSongSource(song.platform, song.originalId, () => {
       if (!isiOS) {
         // playing after getting new src will cause Unhandled Rejection (NotAllowedError) in the development environment of iOS
@@ -144,13 +137,14 @@ class Player extends Component {
       }
     });
   }
+
   play() {
     this.audio.play();
     this.setState({
       playStatus: 'playing',
     });
-
   }
+
   pause() {
     this.audio.pause();
     this.setState({
@@ -175,19 +169,21 @@ class Player extends Component {
           this.setState({
             getMusicUrlStatus: 'failed',
           });
-          notification.open({
-            message: '播放失败',
-          });
+          this.afterLoadingFailure();
         }
       })
       .catch(err => {
         this.setState({
           getMusicUrlStatus: 'failed',
         });
-        notification.open({
-          message: '播放失败',
-        });
+        this.afterLoadingFailure();
       });
+  }
+
+  afterLoadingFailure() {
+    message.error('加载失败');
+    this.playNext('forward');
+    message.info('已跳过');
   }
 
   changePlayProgress(value) {
@@ -218,20 +214,15 @@ class Player extends Component {
     });
   }
 
-  clickPlaylistBtn() {
+  onPlaylistBtnClick() {
     this.setState({
       playingListVisible: !this.state.playingListVisible,
     });
   }
 
-  switchPlayerDetailsVisible = () => {
+  switchPlayerDetailsVisible() {
     this.setState({
       playerDetailsVisible: !this.state.playerDetailsVisible,
-    });
-  }
-  hidePlayerDetails = () => {
-    this.setState({
-      playerDetailsVisible: false,
     });
   }
 
@@ -241,12 +232,12 @@ class Player extends Component {
     const progress = toMinAndSec(this.state.playProgress);
     const total = toMinAndSec(this.state.songDuration);
     return (
-      <div style={{
+      <div
+        style={{
           position: 'fixed',
           bottom: 0,
-          padding: '10px',
+          padding: '6px 20px',
           width: '100%',
-          // height: '77px',
           background: '#222',
           color: 'white',
           zIndex: 1001, // .ant-drawer's z-index = 1000
@@ -267,7 +258,7 @@ class Player extends Component {
           placement="bottom"
           mask={false}
           // destroyOnClose
-          onClose={this.hidePlayerDetails}
+          // onClose={this.hidePlayerDetails}
           closable={false}
         >
           <div style={{ textAlign: 'right' }}>
@@ -298,38 +289,53 @@ class Player extends Component {
               />
             </Col>
             <Col span={4}>
-              <Tooltip
-                title={modeExplanations[this.state.playMode]}
-              >
-                <a
+              <Tooltip title={modeExplanations[this.state.playMode]}>
+                <button
                   onClick={this.switchPlayMode}
-                  style={{ float: 'right' }}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    float: 'right'
+                  }}
                 >
-                  { playModeIcons[this.state.playMode] }
-                </a>
+                  {playModeIcons[this.state.playMode]}
+                </button>
               </Tooltip>
             </Col>
           </Row>
         </Drawer>
 
         <Row type="flex" align="middle" justify="space-between"
+          style={{
+            height: '48px',
+          }}
         >
           <Col span={14} onClick={this.switchPlayerDetailsVisible}>
             {
-              currentSong &&
-              <div >
-                <h3 className="nowrap" style={{ color: 'white' }}>
-                  {currentSong.name}
-                </h3>
-                <h5 className="nowrap" style={{ color: 'white' }}>
-                  {
-                    currentSong.artists.map(artist => artist.name)
-                      .reduce((accumulator, currentValue) =>
-                        accumulator + '/' + currentValue
-                      )
-                  }
-                </h5>
-              </div>
+              currentSong && (
+                <>
+                  <div className="nowrap"
+                    style={{
+                      fontSize: 16,
+                      height: 26,
+                    }}
+                  >
+                    {currentSong.name}
+                  </div>
+                  <div className="nowrap"
+                    style={{
+                      color: 'rgb(200,200,200)',
+                    }}
+                  >
+                    {
+                      currentSong.artists.map(artist => artist.name)
+                        .reduce((accumulator, currentValue) =>
+                          accumulator + '/' + currentValue
+                        )
+                    }
+                  </div>
+                </>
+              )
             }
           </Col>
           <Col span={4}>
@@ -338,7 +344,6 @@ class Player extends Component {
               <img src={logos[currentSong.platform]} alt={currentSong.platform} />
             }
           </Col>
-
           <Col span={3}>
             <Button ghost shape="circle"
               icon={
@@ -362,7 +367,7 @@ class Player extends Component {
           </Col>
           <Col span={3} style={{ float: 'right' }}>
             <Button ghost icon={<UnorderedListOutlined />}
-              onClick={this.clickPlaylistBtn}
+              onClick={this.onPlaylistBtnClick}
               title="播放列表"
               style={{ float: 'right' }}
             />

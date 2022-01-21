@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import { Row, Col, Button } from 'antd';
-
-import neteaseMusicLogo from './images/netease_16.ico';
-import qqMusicLogo from './images/qq_16.ico';
-import xiamiMusicLogo from './images/xiami_16.ico';
-import kuwoMusicLogo from '../../images/kuwo_16.ico';
 import { connect } from 'react-redux';
 import { DeleteOutlined } from '@ant-design/icons';
+
+import neteaseMusicLogo from '../../images/netease_16.ico';
+import qqMusicLogo from '../../images/qq_16.ico';
+import kuwoMusicLogo from '../../images/kuwo_16.ico';
+
 
 class SongItem extends Component {
   constructor(props) {
     super(props);
+
+    this.changeCurrentSong = this.changeCurrentSong.bind(this);
+    this.deleteFromPlaylist = this.deleteFromPlaylist.bind(this);
   }
 
-  changeCurrentSong = () => {
+  changeCurrentSong() {
     const index = this.props.playlist.findIndex(song =>
       song.newId === this.props.song.newId);
     if (index === -1) {
@@ -24,7 +27,7 @@ class SongItem extends Component {
     }
   }
 
-  deleteFromPlaylist = () => {
+  deleteFromPlaylist() {
     const index = this.props.playlist.findIndex(song =>
       song.newId === this.props.song.newId);
     if (index + 1 === this.props.playlist.length) {
@@ -34,7 +37,7 @@ class SongItem extends Component {
   }
 
   render() {
-    let { song, currentSong } = this.props;
+    let { song } = this.props;
     return (
       <Row type="flex" align="middle"
         style={{
@@ -44,8 +47,7 @@ class SongItem extends Component {
         }}
         onClick={this.changeCurrentSong}
       >
-        <Col span={12}
-        >
+        <Col span={12}>
           <div className="nowrap">
             <span>{song.name}</span>
           </div>
@@ -84,7 +86,6 @@ class SongItem extends Component {
 const logos = {
   qq: qqMusicLogo,
   netease: neteaseMusicLogo,
-  xiami: xiamiMusicLogo,
   kuwo: kuwoMusicLogo,
 };
 

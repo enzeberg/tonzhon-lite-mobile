@@ -9,9 +9,10 @@ import OperatingBarOfSongList from './OperatingBarOfSongList';
 class Result extends Component {
   constructor(props) {
     super(props);
+    this.onPageChange = this.onPageChange.bind(this);
   }
 
-  onPageChange = (page) => {
+  onPageChange(page) {
     const { provider, keyword, onResultResponded } = this.props;
     fetch(`/api/search?provider=${provider}&keyword=${keyword}&page=${page}`)
       .then(res => res.json())

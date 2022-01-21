@@ -6,9 +6,10 @@ import { PlusOutlined } from '@ant-design/icons';
 class AddTo extends Component {
   constructor(props) {
     super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick = () => {
+  handleClick() {
     this.props.addToPlaylist(this.props.data);
     notification.open({
       message: '已添加至播放列表',

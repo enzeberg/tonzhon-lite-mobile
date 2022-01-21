@@ -14,10 +14,12 @@ store.subscribe(() => {
     onSearch();
     let resultsResponded = 0;
     providers.forEach((provider) => {
-      fetch(`/api/search?provider=${provider}&keyword=${window.encodeURIComponent(searchKeyword)}`, {
-        // withCredentials: true
-        credentials: 'include'
-      })
+      fetch(`/api/search?provider=${provider}&keyword=${window.encodeURIComponent(searchKeyword)}`,
+        {
+          // withCredentials: true
+          credentials: 'include'
+        }
+      )
         .then(res => res.json())
         .then(json => {
           onResultResponded(provider, json);
@@ -28,15 +30,14 @@ store.subscribe(() => {
           console.log('err ', err);
         });
     });
-
   }
-
 });
 
 const onSearch = () => {
   store.dispatch({ type: 'CLEAR_RESULTS' });
   store.dispatch({ type: 'UPDATE_SEARCH_STATUS', data: 'searching' });
 };
+
 const onResultResponded = (provider, data) => {
   store.dispatch({
     type: 'UPDATE_SEARCH_RESULTS', provider, data
@@ -50,6 +51,5 @@ const searchEnded = () => {
 const updateSearchHistory = (keyword) => {
   store.dispatch({ type: 'UPDATE_SEARCH_HISTORY', data: keyword });
 };
-
 
 export default store;

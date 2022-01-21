@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { List } from 'antd';
 import { connect } from 'react-redux';
 
-import neteaseMusicLogo from './images/netease_16.ico';
-import qqMusicLogo from './images/qq_16.ico';
+import neteaseMusicLogo from '../../images/netease_16.ico';
+import qqMusicLogo from '../../images/qq_16.ico';
 import kuwoMusicLogo from '../../images/kuwo_16.ico';
 
 const logos = {
@@ -15,33 +15,26 @@ const logos = {
 class SongItem extends Component {
   constructor(props) {
     super(props);
+    this.changeCurrentSong = this.changeCurrentSong.bind(this);
   }
 
-  playOrPause(shouldPlay) {
-    if (shouldPlay) {
-      const index = this.props.playlist.findIndex(
-        song => song.newId === this.props.song.newId);
-      if (index === -1) {
-        this.props.addToPlaylist(this.props.song);
-        this.props.updatePlayIndex(this.props.playlist.length);
-      } else {
-        this.props.updatePlayIndex(index);
-      }
-      this.props.updatePlayAction('play');
+  changeCurrentSong() {
+    const index = this.props.playlist.findIndex(
+      song => song.newId === this.props.song.newId);
+    if (index === -1) {
+      this.props.addToPlaylist(this.props.song);
+      this.props.updatePlayIndex(this.props.playlist.length);
     } else {
-      this.props.updatePlayAction('pause');
+      this.props.updatePlayIndex(index);
     }
   }
 
   render() {
-    let { song, currentSong, showPlatform } = this.props;
-    const shouldPlay =
-      (!currentSong || currentSong.newId !== song.newId) ||
-      (currentSong.newId === song.newId && this.props.playAction === 'pause');
+    let { song, showPlatform } = this.props;
     return (
       <List.Item
-        onClick={() => this.playOrPause(shouldPlay)}
         key={song.newId}
+        onClick={this.changeCurrentSong}
         style={{
           padding: '10px 0',
         }}
@@ -72,17 +65,11 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    updateUserFavoriteSongs: (song) => {
-      return dispatch({ type: 'UPDATE_FAVORITE_SONGS', data: song });
-    },
     addToPlaylist: (song) => {
       dispatch({ type: 'ADD_TO_PLAYLIST', data: song });
     },
     updatePlayIndex: (index) => {
       dispatch({ type: 'UPDATE_PLAY_INDEX', data: index });
-    },
-    updatePlayAction: (playAction) => {
-      dispatch({ type: 'UPDATE_PLAY_ACTION', data: playAction });
     },
   };
 }

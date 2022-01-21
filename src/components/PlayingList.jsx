@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import ItemInPlaylist from './SongItem/item_in_playlist';
 
 class PlayingList extends Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   render() {
     return (
@@ -37,7 +37,6 @@ class PlayingList extends Component {
         }
       >
         <div style={styles.wrapper}>
-
           <div className="playingList" style={styles.list}>
             <List
               itemLayout="horizontal"
