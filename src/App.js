@@ -64,7 +64,7 @@ class App extends Component {
                     </>
                   )}
                 />
-                <Route path="/*" render={NotFound} />
+                <Route path="/*" component={NotFound} />
               </Switch>
             </div>
           </Content>

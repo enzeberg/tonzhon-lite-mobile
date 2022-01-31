@@ -25,7 +25,7 @@ class Result extends Component {
   }
 
   render() {
-    const { result, searchType, provider } = this.props;
+    const { result, provider } = this.props;
     let mainPart;
     if (result.searchSuccess) {
       mainPart = <SongList songs={result.data.songs} />;
@@ -35,7 +35,8 @@ class Result extends Component {
 
     return (
       <Wrapper provider={provider}
-        pagination={result.searchSuccess &&
+        pagination={
+          result.searchSuccess &&
           <Pagination
             simple
             onChange={this.onPageChange}
@@ -44,7 +45,7 @@ class Result extends Component {
           />
         }
         operatingBar={
-          result.searchSuccess && searchType === 'song' &&
+          result.searchSuccess &&
           <OperatingBarOfSongList songs={result.data.songs} />
         }
       >

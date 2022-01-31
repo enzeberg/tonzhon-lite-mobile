@@ -15,10 +15,10 @@ const logos = {
 class SongItem extends Component {
   constructor(props) {
     super(props);
-    this.changeCurrentSong = this.changeCurrentSong.bind(this);
+    this.onItemClick = this.onItemClick.bind(this);
   }
 
-  changeCurrentSong() {
+  onItemClick() {
     const index = this.props.playlist.findIndex(
       song => song.newId === this.props.song.newId);
     if (index === -1) {
@@ -34,7 +34,7 @@ class SongItem extends Component {
     return (
       <List.Item
         key={song.newId}
-        onClick={this.changeCurrentSong}
+        onClick={this.onItemClick}
         style={{
           padding: '10px 0',
         }}
@@ -47,7 +47,8 @@ class SongItem extends Component {
         />
         {
           showPlatform &&
-            <img src={logos[song.platform]} alt=""
+            <img src={logos[song.platform]}
+              alt={song.platform}
               style={{ width: 16, height: 16 }}
             />
         }

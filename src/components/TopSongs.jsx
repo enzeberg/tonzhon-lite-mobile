@@ -29,7 +29,6 @@ class TopSongs extends Component {
               ]
             });
           }
-
         }
       });
     }

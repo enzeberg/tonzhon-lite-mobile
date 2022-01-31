@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Slider, Button, message, Tooltip, Drawer } from 'antd';
+import { Row, Col, Slider, Button, message, Tooltip, Drawer, Space } from 'antd';
 import {
   StepBackwardOutlined,
   StepForwardOutlined,
@@ -49,11 +49,11 @@ class Player extends Component {
       playingListVisible: false,
     };
 
-    this.playOrPause = this.playOrPause.bind(this);
-    this.changePlayProgress = this.changePlayProgress.bind(this);
-    this.switchPlayMode = this.switchPlayMode.bind(this);
-    this.onPlaylistBtnClick = this.onPlaylistBtnClick.bind(this);
-    this.switchPlayerDetailsVisible = this.switchPlayerDetailsVisible.bind(this);
+    this.onCentralBtnClick = this.onCentralBtnClick.bind(this);
+    this.onPlayProgressSliderChange = this.onPlayProgressSliderChange.bind(this);
+    this.onPlayModeBtnClick = this.onPlayModeBtnClick.bind(this);
+    this.onPlayingListBtnClick = this.onPlayingListBtnClick.bind(this);
+    this.onLeftPartClick = this.onLeftPartClick.bind(this);
   }
 
   componentDidMount() {
@@ -115,7 +115,7 @@ class Player extends Component {
     }
   }
 
-  playOrPause() {
+  onCentralBtnClick() {
     const { playStatus } = this.state;
     if (playStatus === 'pausing') {
       if (this.state.songSource) {
@@ -186,7 +186,7 @@ class Player extends Component {
     message.info('已跳过');
   }
 
-  changePlayProgress(value) {
+  onPlayProgressSliderChange(value) {
     this.audio.currentTime = value;
     this.setState({ playProgress: value });
   }
@@ -205,7 +205,7 @@ class Player extends Component {
     }
   }
 
-  switchPlayMode() {
+  onPlayModeBtnClick() {
     const i = playModes.indexOf(this.state.playMode);
     const mode = playModes[i + 1] || playModes[0];
     localStorage.setItem('playMode', mode);
@@ -214,13 +214,13 @@ class Player extends Component {
     });
   }
 
-  onPlaylistBtnClick() {
+  onPlayingListBtnClick() {
     this.setState({
       playingListVisible: !this.state.playingListVisible,
     });
   }
 
-  switchPlayerDetailsVisible() {
+  onLeftPartClick() {
     this.setState({
       playerDetailsVisible: !this.state.playerDetailsVisible,
     });
@@ -242,7 +242,6 @@ class Player extends Component {
           color: 'white',
           zIndex: 1001, // .ant-drawer's z-index = 1000
         }}
-        id="music-player"
       >
         <audio
           src={this.state.songSource}
@@ -271,27 +270,29 @@ class Player extends Component {
             max={this.state.songDuration ? parseInt(this.state.songDuration) : 0}
             value={this.state.playProgress}
             tipFormatter={(value) => toMinAndSec(value)}
-            onChange={this.changePlayProgress}
+            onChange={this.onPlayProgressSliderChange}
             disabled={!this.state.songSource}
             style={{ margin: '0 0 12px 0' }}
           />
           <Row
-            type="flex" align="middle" className="container"
+            type="flex" align="middle"
+            className="container"
             style={{ marginBottom: 10 }}
           >
             <Col span={20}>
-              <Button shape="circle" icon={<StepBackwardOutlined />}
-                onClick={() => this.playNext('backward')}
-                style={{ marginRight: 20 }}
-              />
-              <Button shape="circle" icon={<StepForwardOutlined />}
-                onClick={() => this.playNext('forward')}
-              />
+              <Space size="large">
+                <Button shape="circle" icon={<StepBackwardOutlined />}
+                  onClick={() => this.playNext('backward')}
+                />
+                <Button shape="circle" icon={<StepForwardOutlined />}
+                  onClick={() => this.playNext('forward')}
+                />
+              </Space>
             </Col>
             <Col span={4}>
               <Tooltip title={modeExplanations[this.state.playMode]}>
                 <button
-                  onClick={this.switchPlayMode}
+                  onClick={this.onPlayModeBtnClick}
                   style={{
                     border: 'none',
                     background: 'none',
@@ -310,7 +311,9 @@ class Player extends Component {
             height: '48px',
           }}
         >
-          <Col span={14} onClick={this.switchPlayerDetailsVisible}>
+          <Col span={14}
+            onClick={this.onLeftPartClick}
+          >
             {
               currentSong && (
                 <>
@@ -345,7 +348,8 @@ class Player extends Component {
             }
           </Col>
           <Col span={3}>
-            <Button ghost shape="circle"
+            <Button ghost
+              shape="circle"
               icon={
                 getMusicUrlStatus === 'notYet' ? <CaretRightOutlined />
                   : (
@@ -361,13 +365,13 @@ class Player extends Component {
                       )
                   )
               }
-              onClick={this.playOrPause}
+              onClick={this.onCentralBtnClick}
               disabled={!currentSong}
             />
           </Col>
           <Col span={3} style={{ float: 'right' }}>
             <Button ghost icon={<UnorderedListOutlined />}
-              onClick={this.onPlaylistBtnClick}
+              onClick={this.onPlayingListBtnClick}
               title="播放列表"
               style={{ float: 'right' }}
             />

@@ -11,7 +11,7 @@ function TheHeader() {
       style={{
         width: '100%',
         height: '52px',
-        zIndex: 1040,
+        zIndex: 2,
         position: 'fixed',
         textAlign: 'center',
         padding: '8px',

@@ -14,12 +14,13 @@ class Wrapper extends Component {
     const { provider } = this.props;
     const logo = logos[provider];
     return (
-      <div style={{
-        borderRadius: 5,
-        padding: '10px',
-        marginBottom: '10px',
-        backgroundColor: 'white',
-      }}
+      <div
+        style={{
+          borderRadius: 5,
+          padding: '10px',
+          marginBottom: '10px',
+          backgroundColor: 'white',
+        }}
       >
         <Row type="flex" align="middle">
           <Col span={2}>

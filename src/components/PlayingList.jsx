@@ -3,7 +3,7 @@ import { Button, List, Row, Col, Drawer } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
-import ItemInPlaylist from './SongItem/item_in_playlist';
+import ItemInPlaylist from './SongItem/in_playing_list';
 
 class PlayingList extends Component {
   // constructor(props) {
@@ -24,7 +24,7 @@ class PlayingList extends Component {
           zIndex: 10,
         }}
         title={
-          <Row type="flex" align="middle" style={styles.header}>
+          <Row type="flex" align="middle">
             <Col span={18}>播放列表</Col>
             <Col span={6}>
               <Button icon={<DeleteOutlined />}
@@ -36,38 +36,26 @@ class PlayingList extends Component {
           </Row>
         }
       >
-        <div style={styles.wrapper}>
-          <div className="playingList" style={styles.list}>
-            <List
-              itemLayout="horizontal"
-              dataSource={this.props.dataSource}
-              size="small"
-              renderItem={song => {
-                return (
-                  <List.Item
-                    key={`${song.platform}${song.originalId}`}
-                  >
-                    <ItemInPlaylist song={song} />
-                  </List.Item>
-                );
-              }}
-            />
-          </div>
+        <div className="playingList"
+          style={{
+            overflow: 'auto',
+            height: 400,
+            padding: '0 4px',
+          }}
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={this.props.dataSource}
+            size="small"
+            renderItem={song => (
+              <ItemInPlaylist song={song} />
+            )}
+          />
         </div>
       </Drawer>
     );
   }
 }
-
-const styles = {
-  list: {
-    // color: 'white',
-    overflow: 'auto',
-    // background: 'rgba(150, 150, 150, 0.8)',
-    height: 400,
-    padding: '0 10px',
-  },
-};
 
 function mapStateToProps(state) {
   return {

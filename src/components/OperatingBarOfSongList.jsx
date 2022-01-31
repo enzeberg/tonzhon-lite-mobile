@@ -14,7 +14,8 @@ class OperatingBarOfSongList extends Component {
     return (
       <Row type="flex" align="middle" justify="space-around" gutter={5}>
         <Col>
-          <Button icon={<CaretRightOutlined />} shape="circle"
+          <Button shape="circle"
+            icon={<CaretRightOutlined />}
             onClick={() => this.props.playSongList(this.props.songs)}
           />
         </Col>

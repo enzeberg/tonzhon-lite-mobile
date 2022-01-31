@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Button } from 'antd';
+import { List, Row, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import { DeleteOutlined } from '@ant-design/icons';
 
@@ -12,11 +12,11 @@ class SongItem extends Component {
   constructor(props) {
     super(props);
 
-    this.changeCurrentSong = this.changeCurrentSong.bind(this);
-    this.deleteFromPlaylist = this.deleteFromPlaylist.bind(this);
+    this.onMainPartClick = this.onMainPartClick.bind(this);
+    this.onDeleteBtnClick = this.onDeleteBtnClick.bind(this);
   }
 
-  changeCurrentSong() {
+  onMainPartClick() {
     const index = this.props.playlist.findIndex(song =>
       song.newId === this.props.song.newId);
     if (index === -1) {
@@ -27,7 +27,7 @@ class SongItem extends Component {
     }
   }
 
-  deleteFromPlaylist() {
+  onDeleteBtnClick() {
     const index = this.props.playlist.findIndex(song =>
       song.newId === this.props.song.newId);
     if (index + 1 === this.props.playlist.length) {
@@ -39,46 +39,45 @@ class SongItem extends Component {
   render() {
     let { song } = this.props;
     return (
-      <Row type="flex" align="middle"
-        style={{
-          width: '100%',
-          // color: 'white',
-          padding: '0 10px'
-        }}
-        onClick={this.changeCurrentSong}
-      >
-        <Col span={12}>
-          <div className="nowrap">
-            <span>{song.name}</span>
-          </div>
-        </Col>
-        <Col span={8}>
-          <div className="nowrap">
-            {
-              song.artists.map(artist => artist.name)
-                .reduce((accumulator, currentValue) =>
-                  accumulator + ' / ' + currentValue
-                )
-            }
-          </div>
-        </Col>
-        <Col span={2}>
-          <img src={logos[song.platform]} alt={song.platform}
-          />
-        </Col>
-        <Col span={2}>
-          <Button
-            title="删除"
-            onClick={this.deleteFromPlaylist}
-            icon={<DeleteOutlined />}
-            style={{
-              // color: 'white',
-              border: 'none',
-              // backgroundColor: 'rgba(0, 0, 0, 0)',
-            }}
-          />
-        </Col>
-      </Row>
+      <List.Item style={{ padding: '8px 10px' }}>
+        <Row type="flex" align="middle"
+          style={{
+            width: '100%',
+          }}
+        >
+          <Col span={22}
+            onClick={this.onMainPartClick}
+          >
+            <Row align="middle">
+              <Col span={13}>
+                <div className="nowrap">
+                  <span>{song.name}</span>
+                </div>
+              </Col>
+              <Col span={9}>
+                <div className="nowrap">
+                  {
+                    song.artists.map(artist => artist.name)
+                      .reduce((accumulator, currentValue) =>
+                        accumulator + ' / ' + currentValue
+                      )
+                  }
+                </div>
+              </Col>
+              <Col span={2}>
+                <img src={logos[song.platform]} alt={song.platform} />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={2}>
+            <Button
+              title="删除"
+              onClick={this.onDeleteBtnClick}
+              icon={<DeleteOutlined />}
+            />
+          </Col>
+        </Row>
+      </List.Item>
     );
   }
 }

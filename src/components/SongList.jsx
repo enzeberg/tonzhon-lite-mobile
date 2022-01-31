@@ -13,14 +13,12 @@ class SongList extends Component {
     return (
       <List
         dataSource={songs}
-        renderItem={song => {
-          return (
-            <SongItem key={song.link}
-              song={song}
-              showPlatform={showPlatform}
-            />
-          );
-        }}
+        renderItem={song => (
+          <SongItem
+            song={song}
+            showPlatform={showPlatform}
+          />
+        )}
       />
     );
   }
