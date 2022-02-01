@@ -3,7 +3,7 @@ import { Button, List, Row, Col, Drawer } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
-import ItemInPlaylist from './SongItem/in_playing_list';
+import ItemInPlayingList from './SongItem/in_playing_list';
 
 class PlayingList extends Component {
   // constructor(props) {
@@ -15,7 +15,7 @@ class PlayingList extends Component {
       <Drawer visible={this.props.visible}
         placement="bottom"
         mask={false}
-        height={540}
+        height={500}
         closable={false}
         bodyStyle={{
           padding: '0 0 75px 0',
@@ -48,7 +48,7 @@ class PlayingList extends Component {
             dataSource={this.props.dataSource}
             size="small"
             renderItem={song => (
-              <ItemInPlaylist song={song} />
+              <ItemInPlayingList song={song} />
             )}
           />
         </div>
