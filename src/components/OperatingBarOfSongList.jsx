@@ -30,7 +30,7 @@ class OperatingBarOfSongList extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     playSongList: (songs) => {
-      dispatch({ type: 'NEW_PLAYLIST', data: songs });
+      dispatch({ type: 'NEW_PLAYING_LIST', data: songs });
       dispatch({ type: 'UPDATE_PLAY_INDEX', data: 0 });
     },
   };
