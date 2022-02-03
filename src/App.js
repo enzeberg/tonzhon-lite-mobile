@@ -56,11 +56,9 @@ class App extends Component {
                           />
                         ))
                       }
-                      <div className="loading-anim-wrapper">
-                        {
-                          searchStatus === 'searching' && <Spin />
-                        }
-                      </div>
+                      {
+                        searchStatus === 'searching' && <Spin />
+                      }
                     </>
                   )}
                 />

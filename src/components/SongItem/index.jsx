@@ -19,11 +19,11 @@ class SongItem extends Component {
   }
 
   onItemClick() {
-    const index = this.props.playlist.findIndex(
+    const index = this.props.playingList.findIndex(
       song => song.newId === this.props.song.newId);
     if (index === -1) {
-      this.props.addToPlaylist(this.props.song);
-      this.props.updatePlayIndex(this.props.playlist.length);
+      this.props.addToPlayingList(this.props.song);
+      this.props.updatePlayIndex(this.props.playingList.length);
     } else {
       this.props.updatePlayIndex(index);
     }
@@ -59,15 +59,15 @@ class SongItem extends Component {
 
 function mapStateToProps(state) {
   return {
-    currentSong: state.playlist[state.playIndex],
-    playlist: state.playlist,
+    currentSong: state.playingList[state.playIndex],
+    playingList: state.playingList,
     playAction: state.playAction,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    addToPlaylist: (song) => {
-      dispatch({ type: 'ADD_TO_PLAYLIST', data: song });
+    addToPlayingList: (song) => {
+      dispatch({ type: 'ADD_TO_PLAYING_LIST', data: song });
     },
     updatePlayIndex: (index) => {
       dispatch({ type: 'UPDATE_PLAY_INDEX', data: index });

@@ -18,7 +18,7 @@ class PlayingList extends Component {
         height={500}
         closable={false}
         bodyStyle={{
-          padding: '0 0 75px 0',
+          padding: '0 0 70px',
         }}
         style={{
           zIndex: 10,
@@ -26,7 +26,11 @@ class PlayingList extends Component {
         title={
           <Row type="flex" align="middle">
             <Col span={18}>播放列表</Col>
-            <Col span={6}>
+            <Col span={6}
+              style={{
+                textAlign: 'right',
+              }}
+            >
               <Button icon={<DeleteOutlined />}
                 onClick={this.props.clearPlayingList}
               >
@@ -36,22 +40,18 @@ class PlayingList extends Component {
           </Row>
         }
       >
-        <div className="playingList"
+        <List
+          itemLayout="horizontal"
+          dataSource={this.props.dataSource}
+          size="small"
+          renderItem={song => (
+            <ItemInPlayingList song={song} />
+          )}
           style={{
             overflow: 'auto',
-            height: 400,
-            padding: '0 4px',
+            height: '400px',
           }}
-        >
-          <List
-            itemLayout="horizontal"
-            dataSource={this.props.dataSource}
-            size="small"
-            renderItem={song => (
-              <ItemInPlayingList song={song} />
-            )}
-          />
-        </div>
+        />
       </Drawer>
     );
   }
@@ -59,13 +59,13 @@ class PlayingList extends Component {
 
 function mapStateToProps(state) {
   return {
-    dataSource: state.playlist,
+    dataSource: state.playingList,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
     clearPlayingList: () => {
-      dispatch({ type: 'CLEAR_PLAYLIST' });
+      dispatch({ type: 'CLEAR_PLAYING_LIST' });
     },
   };
 }

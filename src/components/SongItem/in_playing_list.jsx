@@ -12,69 +12,63 @@ class SongItem extends Component {
   constructor(props) {
     super(props);
 
-    this.onMainPartClick = this.onMainPartClick.bind(this);
+    this.onRowClick = this.onRowClick.bind(this);
     this.onDeleteBtnClick = this.onDeleteBtnClick.bind(this);
   }
 
-  onMainPartClick() {
-    const index = this.props.playlist.findIndex(song =>
+  onRowClick() {
+    const index = this.props.playingList.findIndex(song =>
       song.newId === this.props.song.newId);
     if (index === -1) {
-      this.props.addToPlaylist(this.props.song);
-      this.props.updatePlayIndex(this.props.playlist.length);
+      this.props.addToPlayingList(this.props.song);
+      this.props.updatePlayIndex(this.props.playingList.length);
     } else {
       this.props.updatePlayIndex(index);
     }
   }
 
   onDeleteBtnClick() {
-    const index = this.props.playlist.findIndex(song =>
+    const index = this.props.playingList.findIndex(song =>
       song.newId === this.props.song.newId);
-    if (index + 1 === this.props.playlist.length) {
+    if (index + 1 === this.props.playingList.length) {
       this.props.updatePlayIndex(0);
     }
-    this.props.deleteSongInPlaylist(index, this.props.playIndex);
+    this.props.deleteSongInPlayingList(index, this.props.playIndex);
   }
 
   render() {
     let { song } = this.props;
     return (
-      <List.Item style={{ padding: '8px 10px' }}>
+      <List.Item
+        extra={
+          <Button
+            icon={<DeleteOutlined />}
+            size="small"
+            onClick={this.onDeleteBtnClick}
+          />
+        }
+        style={{ padding: '0 20px 0 0' }}
+      >
         <Row type="flex" align="middle"
+          onClick={this.onRowClick}
           style={{
-            width: '100%',
+            width: '90%',
+            padding: '7px 10px 7px 20px',
           }}
         >
-          <Col span={22}
-            onClick={this.onMainPartClick}
-          >
-            <Row align="middle">
-              <Col span={13}>
-                <div className="nowrap">
-                  <span>{song.name}</span>
-                </div>
-              </Col>
-              <Col span={9}>
-                <div className="nowrap">
-                  {
-                    song.artists.map(artist => artist.name)
-                      .reduce((accumulator, currentValue) =>
-                        accumulator + ' / ' + currentValue
-                      )
-                  }
-                </div>
-              </Col>
-              <Col span={2}>
-                <img src={logos[song.platform]} alt={song.platform} />
-              </Col>
-            </Row>
+          <Col span={13} className="nowrap">
+            {song.name}
+          </Col>
+          <Col span={9} className="nowrap">
+            {
+              song.artists.map(artist => artist.name)
+                .reduce((accumulator, currentValue) =>
+                  accumulator + ' / ' + currentValue
+                )
+            }
           </Col>
           <Col span={2}>
-            <Button
-              title="删除"
-              onClick={this.onDeleteBtnClick}
-              icon={<DeleteOutlined />}
-            />
+            <img src={logos[song.platform]} alt={song.platform} />
           </Col>
         </Row>
       </List.Item>
@@ -90,21 +84,21 @@ const logos = {
 
 function mapStateToProps(state) {
   return {
-    currentSong: state.playlist[state.playIndex],
-    playlist: state.playlist,
+    currentSong: state.playingList[state.playIndex],
+    playingList: state.playingList,
     playIndex: state.playIndex,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    addToPlaylist: (song) => {
-      dispatch({ type: 'ADD_TO_PLAYLIST', data: song });
+    addToPlayingList: (song) => {
+      dispatch({ type: 'ADD_TO_PLAYING_LIST', data: song });
     },
     updatePlayIndex: (index) => {
       dispatch({ type: 'UPDATE_PLAY_INDEX', data: index });
     },
-    deleteSongInPlaylist: (indexToDelete, playIndex) => {
-      dispatch({ type: 'DELETE_SONG_IN_PLAYLIST', data: indexToDelete });
+    deleteSongInPlayingList: (indexToDelete, playIndex) => {
+      dispatch({ type: 'DELETE_SONG_IN_PLAYING_LIST', data: indexToDelete });
       if (indexToDelete < playIndex) {
         dispatch({ type: 'UPDATE_PLAY_INDEX', data: playIndex - 1 });
       }

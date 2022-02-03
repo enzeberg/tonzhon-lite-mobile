@@ -40,7 +40,7 @@ class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      getMusicUrlStatus: 'notYet',
+      getSongSourceStatus: 'notYet',
       playStatus: 'pausing',
       playMode: localStorage.getItem('playMode') || 'loop',
       songSource: null,
@@ -93,7 +93,7 @@ class Player extends Component {
     const currentSong = this.props.currentSong;
 
     if (currentSong) {
-      // updating playlist will cause component receive props, so the judgement
+      // updating playingList will cause component receive props, so the judgement
       // is necessary
       if ((prevSong && currentSong.newId !== prevSong.newId) || !prevSong) {
         this.audio.pause();
@@ -154,27 +154,27 @@ class Player extends Component {
 
   getSongSource(platform, originalId, callback) {
     this.setState({
-      getMusicUrlStatus: 'started',
+      getSongSourceStatus: 'started',
     });
     fetch(`/api/song_source/${platform}/${originalId}`)
       .then(res => res.json())
       .then(json => {
         if (json.status === 'ok') {
           this.setState({
-            getMusicUrlStatus: 'ok',
+            getSongSourceStatus: 'ok',
             songSource: json.data.songSource,
             songLoaded: false,
           }, callback);
         } else {
           this.setState({
-            getMusicUrlStatus: 'failed',
+            getSongSourceStatus: 'failed',
           });
           this.afterLoadingFailure();
         }
       })
       .catch(err => {
         this.setState({
-          getMusicUrlStatus: 'failed',
+          getSongSourceStatus: 'failed',
         });
         this.afterLoadingFailure();
       });
@@ -195,13 +195,13 @@ class Player extends Component {
     if (this.state.playStatus === 'playing') {
       this.pause();
     }
-    const { currentSong, playlist } = this.props;
+    const { currentSong, playingList } = this.props;
     const { playMode } = this.state;
-    if (playMode === 'single' || playlist.length === 1) {
+    if (playMode === 'single' || playingList.length === 1) {
       this.audio.currentTime = 0;
       this.play();
     } else {
-      this.props.changePlayIndex(currentSong, playlist, playMode, direction);
+      this.props.changePlayIndex(currentSong, playingList, playMode, direction);
     }
   }
 
@@ -227,7 +227,7 @@ class Player extends Component {
   }
 
   render() {
-    const { getMusicUrlStatus, playStatus } = this.state;
+    const { getSongSourceStatus, playStatus } = this.state;
     const { currentSong } = this.props;
     const progress = toMinAndSec(this.state.playProgress);
     const total = toMinAndSec(this.state.songDuration);
@@ -260,10 +260,27 @@ class Player extends Component {
           // onClose={this.hidePlayerDetails}
           closable={false}
         >
-          <div style={{ textAlign: 'right' }}>
+          <div
+            style={{
+              textAlign: 'right',
+              height: '22px', // 不设高度会造成：因为内容变化导致下方抖动
+            }}
+          >
             {
-              this.state.songLoaded ? `${progress} / ${total}`
-              : '00:00 / 00:00'
+              // this.state.songLoaded ? `${progress} / ${total}`
+              // : '00:00 / 00:00'
+              getSongSourceStatus === 'started'
+                ? <LoadingOutlined />
+                : (
+                  getSongSourceStatus === 'failed' ? '加载失败' :
+                    (
+                      this.state.songLoaded &&
+                      <>
+                        <span>{progress}</span>
+                        <span> / {total}</span>
+                      </>
+                    )
+                )
             }
           </div>
           <Slider min={0}
@@ -351,11 +368,11 @@ class Player extends Component {
             <Button ghost
               shape="circle"
               icon={
-                getMusicUrlStatus === 'notYet' ? <CaretRightOutlined />
+                getSongSourceStatus === 'notYet' ? <CaretRightOutlined />
                   : (
-                    getMusicUrlStatus === 'started' ? <LoadingOutlined />
+                    getSongSourceStatus === 'started' ? <LoadingOutlined />
                       : (
-                        getMusicUrlStatus === 'ok'
+                        getSongSourceStatus === 'ok'
                           ? (
                             playStatus === 'playing'
                               ? <PauseOutlined />
@@ -392,28 +409,28 @@ const logos = {
 };
 
 function mapStateToProps(state) {
-  const currentSong = state.playlist[state.playIndex];
+  const currentSong = state.playingList[state.playIndex];
   return {
     currentSong: currentSong,
-    playlist: state.playlist,
+    playingList: state.playingList,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    changePlayIndex: (currentSong, playlist, playMode, direction) => {
+    changePlayIndex: (currentSong, playingList, playMode, direction) => {
       let nextPlayIndex;
-      const currentIndex = playlist.findIndex(song =>
+      const currentIndex = playingList.findIndex(song =>
         song.newId === currentSong.newId);
       if (playMode === 'loop') {
         if (direction === 'forward') {
-          nextPlayIndex = playlist[currentIndex + 1] ? currentIndex + 1 : 0;
+          nextPlayIndex = playingList[currentIndex + 1] ? currentIndex + 1 : 0;
         } else if (direction === 'backward') {
-          nextPlayIndex = playlist[currentIndex - 1] ? currentIndex - 1 :
-            playlist.length - 1;
+          nextPlayIndex = playingList[currentIndex - 1] ? currentIndex - 1 :
+            playingList.length - 1;
         }
       } else if (playMode === 'shuffle') {
         do {
-          nextPlayIndex = Math.floor(Math.random() * playlist.length);
+          nextPlayIndex = Math.floor(Math.random() * playingList.length);
         } while (nextPlayIndex === currentIndex);
       }
       if (nextPlayIndex !== undefined) {

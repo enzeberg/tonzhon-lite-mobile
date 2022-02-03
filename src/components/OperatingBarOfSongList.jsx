@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
-import AddTo from './AddTo';
+import AddToPlayingList from './AddToPlayingList';
 
 class OperatingBarOfSongList extends Component {
   // constructor(props) {
@@ -20,7 +20,7 @@ class OperatingBarOfSongList extends Component {
           />
         </Col>
         <Col>
-          <AddTo data={this.props.songs} />
+          <AddToPlayingList data={this.props.songs} />
         </Col>
       </Row>
     );

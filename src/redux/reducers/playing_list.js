@@ -1,9 +1,9 @@
-let list = localStorage.getItem('playlist');
+let list = localStorage.getItem('playingList');
 const initialState = (list && JSON.parse(list)) || [];
 
-const playlist = (state = initialState, action) => {
+const playingList = (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD_TO_PLAYLIST':
+    case 'ADD_TO_PLAYING_LIST':
       let { data } = action;
       if (Array.isArray(data)) {
         data = data.filter((song) => {
@@ -17,23 +17,23 @@ const playlist = (state = initialState, action) => {
           list = [...state, data];
         }
       }
-      localStorage.setItem('playlist', JSON.stringify(list));
+      localStorage.setItem('playingList', JSON.stringify(list));
       return list;
-    case 'NEW_PLAYLIST':
+    case 'NEW_PLAYING_LIST':
       list = action.data;
-      localStorage.setItem('playlist', JSON.stringify(list));
+      localStorage.setItem('playingList', JSON.stringify(list));
       return list;
-    case 'DELETE_SONG_IN_PLAYLIST':
+    case 'DELETE_SONG_IN_PLAYING_LIST':
       list = Array.from(state);
       list.splice(action.data, 1);
-      localStorage.setItem('playlist', JSON.stringify(list));
+      localStorage.setItem('playingList', JSON.stringify(list));
       return list;
-    case 'CLEAR_PLAYLIST':
-      localStorage.setItem('playlist', '');
+    case 'CLEAR_PLAYING_LIST':
+      localStorage.setItem('playingList', '');
       return [];
     default:
       return state;
   }
 };
 
-export default playlist;
+export default playingList;
