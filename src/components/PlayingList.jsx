@@ -12,7 +12,8 @@ class PlayingList extends Component {
 
   render() {
     return (
-      <Drawer visible={this.props.visible}
+      <Drawer
+        visible={this.props.visible}
         placement="bottom"
         mask={false}
         height={500}

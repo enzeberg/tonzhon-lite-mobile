@@ -2,15 +2,10 @@ import React, { Component } from 'react';
 import { List } from 'antd';
 import { connect } from 'react-redux';
 
+import artistsReducer from '../../utils/artists_reducer';
 import neteaseMusicLogo from '../../images/netease_16.ico';
 import qqMusicLogo from '../../images/qq_16.ico';
 import kuwoMusicLogo from '../../images/kuwo_16.ico';
-
-const logos = {
-  qq: qqMusicLogo,
-  netease: neteaseMusicLogo,
-  kuwo: kuwoMusicLogo,
-};
 
 class SongItem extends Component {
   constructor(props) {
@@ -40,10 +35,7 @@ class SongItem extends Component {
         }}
       >
         <List.Item.Meta title={song.name}
-          description={song.artists.map(artist => artist.name)
-            .reduce((accumulator, currentValue) =>
-              accumulator + ' / ' + currentValue
-            )}
+          description={artistsReducer(song.artists)}
         />
         {
           showPlatform &&
@@ -57,11 +49,15 @@ class SongItem extends Component {
   }
 }
 
+const logos = {
+  qq: qqMusicLogo,
+  netease: neteaseMusicLogo,
+  kuwo: kuwoMusicLogo,
+};
+
 function mapStateToProps(state) {
   return {
-    currentSong: state.playingList[state.playIndex],
     playingList: state.playingList,
-    playAction: state.playAction,
   };
 }
 function mapDispatchToProps(dispatch) {

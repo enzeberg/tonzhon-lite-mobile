@@ -16,7 +16,8 @@ import {
 } from 'react-icons/md';
 
 import PlayingList from './PlayingList';
-import { toMinAndSec } from '../utils/time_converter';
+import toMinAndSec from '../utils/to_min_and_sec';
+import artistsReducer from '../utils/artists_reducer';
 import neteaseMusicLogo from '../images/netease_16.ico';
 import qqMusicLogo from '../images/qq_16.ico';
 import kuwoMusicLogo from '../images/kuwo_16.ico';
@@ -40,13 +41,14 @@ class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      getSongSourceStatus: 'notYet',
-      playStatus: 'pausing',
+      playerStatus: 'pausing',
       playMode: localStorage.getItem('playMode') || 'loop',
-      songSource: null,
-      playProgress: 0,
       playerDetailsVisible: false,
       playingListVisible: false,
+      getSongSourceStatus: 'notYet',
+      songSource: null,
+      songLoaded: false,
+      playProgress: 0,
     };
 
     this.onCentralBtnClick = this.onCentralBtnClick.bind(this);
@@ -61,30 +63,27 @@ class Player extends Component {
       this.setState({
         songLoaded: true,
         songDuration: this.audio.duration,
-        playProgress: 0,
       });
     });
+
     this.audio.addEventListener('play', () => {
       if (this.interval) { clearInterval(this.interval); }
       this.interval = setInterval(() => {
         this.setState({
           playProgress: this.audio.currentTime,
-          // songDuration: this.audio.duration,
         });
       }, 1000);
     });
+
     this.audio.addEventListener('pause', () => {
       if (this.interval) {
         clearInterval(this.interval);
       }
     });
+
     this.audio.addEventListener('ended', () => {
       clearInterval(this.interval);
-      this.setState({
-        playProgress: this.audio.currentTime,
-      }, () => {
-        this.playNext('forward');
-      });
+      this.playNext('forward');
     });
   }
 
@@ -116,15 +115,15 @@ class Player extends Component {
   }
 
   onCentralBtnClick() {
-    const { playStatus } = this.state;
-    if (playStatus === 'pausing') {
+    const { playerStatus } = this.state;
+    if (playerStatus === 'pausing') {
       if (this.state.songSource) {
         this.play();
       } else {
         const { currentSong } = this.props;
         this.getSongSourceAndPlay(currentSong);
       }
-    } else if (playStatus === 'playing') {
+    } else if (playerStatus === 'playing') {
       this.pause();
     }
   }
@@ -141,19 +140,22 @@ class Player extends Component {
   play() {
     this.audio.play();
     this.setState({
-      playStatus: 'playing',
+      playerStatus: 'playing',
     });
   }
 
   pause() {
     this.audio.pause();
     this.setState({
-      playStatus: 'pausing',
+      playerStatus: 'pausing',
     });
   }
 
   getSongSource(platform, originalId, callback) {
     this.setState({
+      songSource: null,
+      songLoaded: false,
+      playProgress: 0,
       getSongSourceStatus: 'started',
     });
     fetch(`/api/song_source/${platform}/${originalId}`)
@@ -163,27 +165,24 @@ class Player extends Component {
           this.setState({
             getSongSourceStatus: 'ok',
             songSource: json.data.songSource,
-            songLoaded: false,
           }, callback);
         } else {
-          this.setState({
-            getSongSourceStatus: 'failed',
-          });
-          this.afterLoadingFailure();
+          this.failedToGetSongSource();
         }
       })
       .catch(err => {
-        this.setState({
-          getSongSourceStatus: 'failed',
-        });
-        this.afterLoadingFailure();
+        this.failedToGetSongSource();
       });
   }
 
-  afterLoadingFailure() {
-    message.error('加载失败');
-    this.playNext('forward');
-    message.info('已跳过');
+  failedToGetSongSource() {
+    this.setState({
+      getSongSourceStatus: 'failed',
+    }, () => {
+      message.error('加载失败');
+      this.playNext('forward');
+      message.info('已跳过');
+    });
   }
 
   onPlayProgressSliderChange(value) {
@@ -192,7 +191,7 @@ class Player extends Component {
   }
 
   playNext(direction) {
-    if (this.state.playStatus === 'playing') {
+    if (this.state.playerStatus === 'playing') {
       this.pause();
     }
     const { currentSong, playingList } = this.props;
@@ -227,7 +226,7 @@ class Player extends Component {
   }
 
   render() {
-    const { getSongSourceStatus, playStatus } = this.state;
+    const { playerStatus, getSongSourceStatus, songLoaded } = this.state;
     const { currentSong } = this.props;
     const progress = toMinAndSec(this.state.playProgress);
     const total = toMinAndSec(this.state.songDuration);
@@ -267,20 +266,24 @@ class Player extends Component {
             }}
           >
             {
-              // this.state.songLoaded ? `${progress} / ${total}`
-              // : '00:00 / 00:00'
-              getSongSourceStatus === 'started'
+              songLoaded
+              ? (
+                <>
+                  <span>{progress}</span>
+                  <span> / {total}</span>
+                </>
+              )
+              : (
+                getSongSourceStatus === 'started'
                 ? <LoadingOutlined />
                 : (
-                  getSongSourceStatus === 'failed' ? '加载失败' :
-                    (
-                      this.state.songLoaded &&
-                      <>
-                        <span>{progress}</span>
-                        <span> / {total}</span>
-                      </>
-                    )
+                  getSongSourceStatus === 'ok'
+                  ? <LoadingOutlined />
+                  : (
+                    getSongSourceStatus === 'failed' && '加载失败'
+                  )
                 )
+              )
             }
           </div>
           <Slider min={0}
@@ -348,10 +351,7 @@ class Player extends Component {
                     }}
                   >
                     {
-                      currentSong.artists.map(artist => artist.name)
-                        .reduce((accumulator, currentValue) =>
-                          accumulator + '/' + currentValue
-                        )
+                      artistsReducer(currentSong.artists)
                     }
                   </div>
                 </>
@@ -368,29 +368,34 @@ class Player extends Component {
             <Button ghost
               shape="circle"
               icon={
-                getSongSourceStatus === 'notYet' ? <CaretRightOutlined />
+                getSongSourceStatus === 'notYet'
+                ? <CaretRightOutlined />
+                : (
+                  getSongSourceStatus === 'started'
+                  ? <LoadingOutlined />
                   : (
-                    getSongSourceStatus === 'started' ? <LoadingOutlined />
-                      : (
-                        getSongSourceStatus === 'ok'
-                          ? (
-                            playStatus === 'playing'
-                              ? <PauseOutlined />
-                              : <CaretRightOutlined />
-                          )
-                          : <CaretRightOutlined />
+                    getSongSourceStatus === 'ok'
+                    ? (
+                      songLoaded
+                      ? (
+                        playerStatus === 'playing'
+                        ? <PauseOutlined />
+                        : <CaretRightOutlined />
                       )
+                      : <LoadingOutlined />
+                    )
+                    : <CaretRightOutlined />
                   )
+                )
               }
               onClick={this.onCentralBtnClick}
               disabled={!currentSong}
             />
           </Col>
-          <Col span={3} style={{ float: 'right' }}>
-            <Button ghost icon={<UnorderedListOutlined />}
+          <Col span={3} style={{ textAlign: 'right' }}>
+            <Button ghost
+              icon={<UnorderedListOutlined />}
               onClick={this.onPlayingListBtnClick}
-              title="播放列表"
-              style={{ float: 'right' }}
             />
           </Col>
         </Row>

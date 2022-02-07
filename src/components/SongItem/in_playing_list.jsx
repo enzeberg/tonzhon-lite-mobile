@@ -3,10 +3,10 @@ import { List, Row, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import { DeleteOutlined } from '@ant-design/icons';
 
+import artistsReducer from '../../utils/artists_reducer';
 import neteaseMusicLogo from '../../images/netease_16.ico';
 import qqMusicLogo from '../../images/qq_16.ico';
 import kuwoMusicLogo from '../../images/kuwo_16.ico';
-
 
 class SongItem extends Component {
   constructor(props) {
@@ -61,10 +61,7 @@ class SongItem extends Component {
           </Col>
           <Col span={9} className="nowrap">
             {
-              song.artists.map(artist => artist.name)
-                .reduce((accumulator, currentValue) =>
-                  accumulator + ' / ' + currentValue
-                )
+              artistsReducer(song.artists)
             }
           </Col>
           <Col span={2}>
@@ -84,7 +81,6 @@ const logos = {
 
 function mapStateToProps(state) {
   return {
-    currentSong: state.playingList[state.playIndex],
     playingList: state.playingList,
     playIndex: state.playIndex,
   };

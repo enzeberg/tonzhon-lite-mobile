@@ -12,7 +12,6 @@ function TheHeader() {
         width: '100%',
         height: '52px',
         zIndex: 2,
-        position: 'fixed',
         textAlign: 'center',
         padding: '8px',
         borderBottom: '0.5px solid #ccc',

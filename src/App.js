@@ -32,7 +32,6 @@ class App extends Component {
           <Content>
             <div
               style={{
-                marginTop: '52px',
                 padding: '10px',
                 marginBottom: '50px',
                 minHeight: '800px',
