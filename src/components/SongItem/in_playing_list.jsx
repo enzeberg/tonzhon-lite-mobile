@@ -18,7 +18,7 @@ class SongItem extends Component {
 
   onRowClick() {
     const index = this.props.playingList.findIndex(song =>
-      song.newId === this.props.song.newId);
+                  song.newId === this.props.song.newId);
     if (index === -1) {
       this.props.addToPlayingList(this.props.song);
       this.props.updatePlayIndex(this.props.playingList.length);
@@ -29,8 +29,9 @@ class SongItem extends Component {
 
   onDeleteBtnClick() {
     const index = this.props.playingList.findIndex(song =>
-      song.newId === this.props.song.newId);
-    if (index + 1 === this.props.playingList.length) {
+                  song.newId === this.props.song.newId);
+    if (this.props.currentSong.newId === this.props.song.newId
+        && index + 1 === this.props.playingList.length) {
       this.props.updatePlayIndex(0);
     }
     this.props.deleteSongInPlayingList(index, this.props.playIndex);
