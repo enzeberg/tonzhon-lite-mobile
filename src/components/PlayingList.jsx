@@ -19,7 +19,7 @@ class PlayingList extends Component {
         height={500}
         closable={false}
         bodyStyle={{
-          padding: '0 0 70px',
+          padding: '0px',
         }}
         style={{
           zIndex: 10,
@@ -50,7 +50,7 @@ class PlayingList extends Component {
           )}
           style={{
             overflow: 'auto',
-            height: '400px',
+            height: '387px',
           }}
         />
       </Drawer>

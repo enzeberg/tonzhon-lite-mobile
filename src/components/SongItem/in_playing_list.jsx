@@ -84,6 +84,7 @@ function mapStateToProps(state) {
   return {
     playingList: state.playingList,
     playIndex: state.playIndex,
+    currentSong: state.playingList[state.playIndex],
   };
 }
 function mapDispatchToProps(dispatch) {
