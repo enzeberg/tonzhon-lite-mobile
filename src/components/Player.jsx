@@ -96,20 +96,17 @@ class Player extends Component {
       // is necessary
       if ((prevSong && currentSong.newId !== prevSong.newId) || !prevSong) {
         this.audio.pause();
-        this.setState({
-          songSource: null,
-          songLoaded: false,
-          playProgress: 0,
-        });
         this.getSongSourceAndPlay(currentSong);
       }
     } else {
       if (prevSong) {
         this.setState({
+          getSongSourceStatus: 'notYet',
           songSource: null,
           songLoaded: false,
           playProgress: 0,
         });
+        this.pause();
       }
     }
   }
@@ -247,8 +244,8 @@ class Player extends Component {
           ref={(audio) => { this.audio = audio; }}
         />
 
-        <Drawer visible={this.state.playerDetailsVisible}
-          // title={currentSong && currentSong.name}
+        <Drawer
+          visible={this.state.playerDetailsVisible}
           onCancel={this.handleCancel}
           // bodyStyle={{
           //   backgroundColor: 'rgba(100, 100, 100, 0.7)'
@@ -256,7 +253,6 @@ class Player extends Component {
           placement="bottom"
           mask={false}
           // destroyOnClose
-          // onClose={this.hidePlayerDetails}
           closable={false}
         >
           <div
