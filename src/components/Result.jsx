@@ -34,7 +34,8 @@ class Result extends Component {
     }
 
     return (
-      <Wrapper provider={provider}
+      <Wrapper
+        provider={provider}
         pagination={
           result.searchSuccess &&
           <Pagination

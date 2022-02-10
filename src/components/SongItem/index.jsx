@@ -25,23 +25,29 @@ class SongItem extends Component {
   }
 
   render() {
-    let { song, showPlatform } = this.props;
+    const { song, showPlatform } = this.props;
+    const { newId, name, artists, platform } = song;
     return (
       <List.Item
-        key={song.newId}
+        key={newId}
         onClick={this.onItemClick}
         style={{
           padding: '10px 0',
         }}
       >
-        <List.Item.Meta title={song.name}
-          description={artistsReducer(song.artists)}
+        <List.Item.Meta
+          title={name}
+          description={artistsReducer(artists)}
         />
         {
           showPlatform &&
-            <img src={logos[song.platform]}
-              alt={song.platform}
-              style={{ width: 16, height: 16 }}
+            <img
+              src={logos[platform]}
+              alt={platform}
+              style={{
+                width: 16,
+                height: 16,
+              }}
             />
         }
       </List.Item>

@@ -27,12 +27,14 @@ class PlayingList extends Component {
         title={
           <Row type="flex" align="middle">
             <Col span={18}>播放列表</Col>
-            <Col span={6}
+            <Col
+              span={6}
               style={{
                 textAlign: 'right',
               }}
             >
-              <Button icon={<DeleteOutlined />}
+              <Button
+                icon={<DeleteOutlined />}
                 onClick={this.props.clearPlayingList}
               >
                 清空

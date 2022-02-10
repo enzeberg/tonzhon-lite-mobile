@@ -38,7 +38,8 @@ class SongItem extends Component {
   }
 
   render() {
-    let { song } = this.props;
+    const { song } = this.props;
+    const { name, artists, platform } = song;
     return (
       <List.Item
         extra={
@@ -50,7 +51,9 @@ class SongItem extends Component {
         }
         style={{ padding: '0 20px 0 0' }}
       >
-        <Row type="flex" align="middle"
+        <Row
+          type="flex"
+          align="middle"
           onClick={this.onRowClick}
           style={{
             width: '90%',
@@ -58,15 +61,15 @@ class SongItem extends Component {
           }}
         >
           <Col span={13} className="nowrap">
-            {song.name}
+            {name}
           </Col>
           <Col span={9} className="nowrap">
             {
-              artistsReducer(song.artists)
+              artistsReducer(artists)
             }
           </Col>
           <Col span={2}>
-            <img src={logos[song.platform]} alt={song.platform} />
+            <img src={logos[platform]} alt={platform} />
           </Col>
         </Row>
       </List.Item>

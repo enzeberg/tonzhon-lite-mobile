@@ -37,7 +37,8 @@ class TopSongs extends Component {
 
   render() {
     return this.state.topSongs.length === 0 ? null : (
-      <div style={{
+      <div
+        style={{
           padding: '10px',
           marginBottom: '10px',
           backgroundColor: 'white',

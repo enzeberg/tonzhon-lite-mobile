@@ -282,7 +282,8 @@ class Player extends Component {
               )
             }
           </div>
-          <Slider min={0}
+          <Slider
+            min={0}
             max={this.state.songDuration ? parseInt(this.state.songDuration) : 0}
             value={this.state.playProgress}
             tipFormatter={(value) => toMinAndSec(value)}
@@ -291,16 +292,21 @@ class Player extends Component {
             style={{ margin: '0 0 12px 0' }}
           />
           <Row
-            type="flex" align="middle"
+            type="flex"
+            align="middle"
             className="container"
             style={{ marginBottom: 10 }}
           >
             <Col span={20}>
               <Space size="large">
-                <Button shape="circle" icon={<StepBackwardOutlined />}
+                <Button
+                  shape="circle"
+                  icon={<StepBackwardOutlined />}
                   onClick={() => this.playNext('backward')}
                 />
-                <Button shape="circle" icon={<StepForwardOutlined />}
+                <Button
+                  shape="circle"
+                  icon={<StepForwardOutlined />}
                   onClick={() => this.playNext('forward')}
                 />
               </Space>
@@ -322,12 +328,16 @@ class Player extends Component {
           </Row>
         </Drawer>
 
-        <Row type="flex" align="middle" justify="space-between"
+        <Row
+          type="flex"
+          align="middle"
+          justify="space-between"
           style={{
             height: '48px',
           }}
         >
-          <Col span={14}
+          <Col
+            span={14}
             onClick={this.onLeftPartClick}
           >
             {
@@ -361,7 +371,8 @@ class Player extends Component {
             }
           </Col>
           <Col span={3}>
-            <Button ghost
+            <Button
+              ghost
               shape="circle"
               icon={
                 getSongSourceStatus === 'notYet'
@@ -389,7 +400,8 @@ class Player extends Component {
             />
           </Col>
           <Col span={3} style={{ textAlign: 'right' }}>
-            <Button ghost
+            <Button
+              ghost
               icon={<UnorderedListOutlined />}
               onClick={this.onPlayingListBtnClick}
             />
