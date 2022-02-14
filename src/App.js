@@ -10,7 +10,6 @@ import SearchWithURL from './components/SearchWithURL';
 import NotFound from './components/NotFound';
 import TopSongs from './components/TopSongs';
 import Player from './components/Player';
-// import { themeColor } from '../../config';
 import './App.less';
 
 const { Content } = Layout;
@@ -42,7 +41,8 @@ class App extends Component {
               </div>
               <Switch>
                 <Route exact path="/" />
-                <Route path="/search"
+                <Route
+                  path="/search"
                   render={() => (
                     <>
                       <TopSongs />

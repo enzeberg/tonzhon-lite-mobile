@@ -343,7 +343,8 @@ class Player extends Component {
             {
               currentSong && (
                 <>
-                  <div className="nowrap"
+                  <div
+                    className="nowrap"
                     style={{
                       fontSize: 16,
                       height: 26,
@@ -351,7 +352,8 @@ class Player extends Component {
                   >
                     {currentSong.name}
                   </div>
-                  <div className="nowrap"
+                  <div
+                    className="nowrap"
                     style={{
                       color: 'rgb(200,200,200)',
                     }}

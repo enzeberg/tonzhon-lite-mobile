@@ -36,17 +36,21 @@ class TopSongs extends Component {
   }
 
   render() {
-    return this.state.topSongs.length === 0 ? null : (
-      <div
-        style={{
-          padding: '10px',
-          marginBottom: '10px',
-          backgroundColor: 'white',
-          borderRadius: 5
-        }}
-      >
-        <SongList songs={this.state.topSongs} showPlatform />
-      </div>
+    return (
+      this.state.topSongs.length > 0
+      ? (
+        <div
+          style={{
+            padding: '10px',
+            marginBottom: '10px',
+            backgroundColor: 'white',
+            borderRadius: 5,
+          }}
+        >
+          <SongList songs={this.state.topSongs} showPlatform />
+        </div>
+      )
+      : null
     );
   }
 }
