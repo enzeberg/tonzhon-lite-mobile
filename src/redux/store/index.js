@@ -2,7 +2,8 @@ import { createStore } from 'redux';
 import reducers from '../reducers';
 
 const store = createStore(reducers);
-const { providers,  searchKeyword } = store.getState();
+const { searchKeyword } = store.getState();
+const platforms = ['qq', 'netease', 'kuwo'];
 let lastKeyword = searchKeyword;
 
 store.subscribe(() => {
@@ -13,8 +14,8 @@ store.subscribe(() => {
     updateSearchHistory(searchKeyword);
     onSearch();
     let resultsResponded = 0;
-    providers.forEach((provider) => {
-      fetch(`/api/search?provider=${provider}&keyword=${window.encodeURIComponent(searchKeyword)}`,
+    platforms.forEach((platform) => {
+      fetch(`/api/search?keyword=${searchKeyword}&platform=${platform}`,
         {
           // withCredentials: true
           credentials: 'include'
@@ -22,9 +23,9 @@ store.subscribe(() => {
       )
         .then(res => res.json())
         .then(json => {
-          onResultResponded(provider, json);
+          onResultResponded(platform, json);
           resultsResponded++;
-          if (resultsResponded === providers.length) searchEnded();
+          if (resultsResponded === platforms.length) searchEnded();
         })
         .catch(err => {
           console.log('err ', err);
@@ -38,9 +39,9 @@ const onSearch = () => {
   store.dispatch({ type: 'UPDATE_SEARCH_STATUS', data: 'searching' });
 };
 
-const onResultResponded = (provider, data) => {
+const onResultResponded = (platform, data) => {
   store.dispatch({
-    type: 'UPDATE_SEARCH_RESULTS', provider, data
+    type: 'UPDATE_SEARCH_RESULTS', platform, data
   });
 };
 

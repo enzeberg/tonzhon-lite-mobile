@@ -14,17 +14,17 @@ class SearchBar extends Component {
   onSearch(keyword) {
     if (keyword !== '' && keyword !== this.props.keyword) {
       this.props.updateSearchKeyword(keyword);
-      this.props.history.push(`/search?keyword=${window.encodeURIComponent(keyword)}`);
+      this.props.history.push(`/search?keyword=${keyword}`);
     }
   }
 
   render() {
-    const { keyword } = this.props;
+    // const { keyword } = this.props;
 
     return (
       <Search
         placeholder="歌曲 | 专辑 | 艺人"
-        defaultValue={ keyword || '' }
+        // defaultValue={ keyword || '' }
         onSearch={this.onSearch}
         enterButton
         size="large"

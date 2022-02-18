@@ -11,8 +11,8 @@ class Wrapper extends Component {
   // }
 
   render() {
-    const { provider } = this.props;
-    const logo = logos[provider];
+    const { platform } = this.props;
+    const logo = logos[platform];
     return (
       <div
         style={{
@@ -24,7 +24,7 @@ class Wrapper extends Component {
       >
         <Row type="flex" align="middle">
           <Col span={2}>
-            <img src={logo} alt={provider} />
+            <img src={logo} alt={platform} />
           </Col>
           <Col span={16}>
             {this.props.pagination}
