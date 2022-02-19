@@ -21,7 +21,7 @@ class TopSongs extends Component {
         });
       } else {
         const prevPlatforms = Object.keys(prevProps.searchResults);
-        // don't update TopSongs when switch page in SearchResult.
+        // don't update TopSongs when switch page in Result.
         if (platforms.length > prevPlatforms.length) {
           platforms.forEach((platform) => {
             this.setState({
@@ -46,7 +46,7 @@ class TopSongs extends Component {
             padding: '10px',
             marginBottom: '10px',
             backgroundColor: 'white',
-            borderRadius: 5,
+            borderRadius: '5px',
           }}
         >
           <SongList songs={topSongs} showPlatform />

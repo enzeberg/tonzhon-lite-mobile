@@ -17,8 +17,8 @@ class Result extends Component {
     fetch(`/api/search?keyword=${keyword}&platform=${platform}&page=${page}`)
       .then(res => res.json())
       .then(json => {
-        const { searchSuccess, data } = json;
-        if (searchSuccess && data.totalCount > 0) {
+        const { success, data } = json;
+        if (success && data.total > 0) {
           onResultResponded(platform, data);
         }
       })
@@ -29,7 +29,7 @@ class Result extends Component {
 
   render() {
     const { platform, data } = this.props;
-    const { songs, totalCount } = data;
+    const { songs, total } = data;
 
     return (
       <Wrapper
@@ -39,7 +39,7 @@ class Result extends Component {
             simple
             onChange={this.onPageChange}
             defaultPageSize={8}
-            total={totalCount}
+            total={total}
           />
         }
         operatingBar={
