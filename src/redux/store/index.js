@@ -23,9 +23,14 @@ store.subscribe(() => {
       )
         .then(res => res.json())
         .then(json => {
-          onResultResponded(platform, json);
-          resultsResponded++;
-          if (resultsResponded === platforms.length) searchEnded();
+          const { searchSuccess, data } = json;
+          if (searchSuccess && data.totalCount > 0) {
+            onResultResponded(platform, data);
+          }
+          ++resultsResponded;
+          if (resultsResponded === platforms.length) {
+            searchEnded();
+          }
         })
         .catch(err => {
           console.log('err ', err);
@@ -41,7 +46,7 @@ const onSearch = () => {
 
 const onResultResponded = (platform, data) => {
   store.dispatch({
-    type: 'UPDATE_SEARCH_RESULTS', platform, data
+    type: 'INITIAL_SEARCH_RESULTS', platform, data
   });
 };
 

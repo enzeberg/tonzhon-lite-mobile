@@ -17,7 +17,10 @@ class Result extends Component {
     fetch(`/api/search?keyword=${keyword}&platform=${platform}&page=${page}`)
       .then(res => res.json())
       .then(json => {
-        onResultResponded(platform, json);
+        const { searchSuccess, data } = json;
+        if (searchSuccess && data.totalCount > 0) {
+          onResultResponded(platform, data);
+        }
       })
       .catch(err => {
         console.log('err ', err);
@@ -25,32 +28,25 @@ class Result extends Component {
   }
 
   render() {
-    const { result, platform } = this.props;
-    let mainPart;
-    if (result.searchSuccess) {
-      mainPart = <SongList songs={result.data.songs} />;
-    } else {
-      mainPart = <h3>{result.message}</h3>;
-    }
+    const { platform, data } = this.props;
+    const { songs, totalCount } = data;
 
     return (
       <Wrapper
         platform={platform}
         pagination={
-          result.searchSuccess &&
           <Pagination
             simple
             onChange={this.onPageChange}
-            defaultPageSize={4}
-            total={result.data.totalCount}
+            defaultPageSize={8}
+            total={totalCount}
           />
         }
         operatingBar={
-          result.searchSuccess &&
-          <OperatingBarOfSongList songs={result.data.songs} />
+          <OperatingBarOfSongList songs={songs} />
         }
       >
-        {mainPart}
+        <SongList songs={songs} />
       </Wrapper>
     );
   }
@@ -64,7 +60,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onResultResponded: (platform, data) => {
-      dispatch({ type: 'UPDATE_SEARCH_RESULTS', platform, data });
+      dispatch({ type: 'UPDATE_SEARCH_RESULT', platform, data });
     }
   };
 }

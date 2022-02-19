@@ -11,7 +11,7 @@ class Wrapper extends Component {
   // }
 
   render() {
-    const { platform } = this.props;
+    const { platform, pagination, operatingBar } = this.props;
     const logo = logos[platform];
     return (
       <div
@@ -27,10 +27,10 @@ class Wrapper extends Component {
             <img src={logo} alt={platform} />
           </Col>
           <Col span={16}>
-            {this.props.pagination}
+            {pagination}
           </Col>
           <Col span={6}>
-            {this.props.operatingBar}
+            {operatingBar}
           </Col>
         </Row>
         {this.props.children}

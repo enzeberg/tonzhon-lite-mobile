@@ -43,23 +43,28 @@ class App extends Component {
                 <Route exact path="/" />
                 <Route
                   path="/search"
-                  render={() => (
-                    <>
-                      <TopSongs />
-                      {
-                        Object.keys(searchResults).map((key) => (
-                          <Result
-                            result={searchResults[key]}
-                            provider={key}
-                            key={key}
-                          />
-                        ))
-                      }
-                      {
-                        searchStatus === 'searching' && <Spin />
-                      }
-                    </>
-                  )}
+                  render={
+                    () => {
+                      const platforms = Object.keys(searchResults);
+                      return (
+                        <>
+                          <TopSongs />
+                          {
+                            platforms.map((platform) => (
+                              <Result
+                                key={platform}
+                                platform={platform}
+                                data={searchResults[platform]}
+                              />
+                            ))
+                          }
+                          {
+                            searchStatus === 'searching' && <Spin />
+                          }
+                        </>
+                      );
+                    }
+                  }
                 />
                 <Route path="/*" component={NotFound} />
               </Switch>

@@ -12,32 +12,34 @@ class TopSongs extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const currentResults = this.props.searchResults;
-    // changing search keyword will cause 'CLEAR_RESULTS', which means the topSongs should be cleared too.
-    if (currentResults !== prevProps.searchResults) {
-      if (Object.keys(currentResults).length === 0) {
+    const { searchResults } = this.props;
+    if (searchResults !== prevProps.searchResults) {
+      const platforms = Object.keys(searchResults);
+      if (platforms.length === 0) {
         this.setState({
           topSongs: []
         });
-      }
-      Object.keys(currentResults).forEach((key) => {
-        if (this.state.topSongs.every((song) => song.platform !== key)) {
-          if (currentResults[key].searchSuccess) {
+      } else {
+        const prevPlatforms = Object.keys(prevProps.searchResults);
+        // don't update TopSongs when switch page in SearchResult.
+        if (platforms.length > prevPlatforms.length) {
+          platforms.forEach((platform) => {
             this.setState({
               topSongs: [
                 ...this.state.topSongs,
-                currentResults[key].data.songs[0]
+                searchResults[platform].songs[0]
               ]
             });
-          }
+          });
         }
-      });
+      }
     }
   }
 
   render() {
+    const { topSongs } = this.state;
     return (
-      this.state.topSongs.length > 0
+      topSongs.length > 0
       ? (
         <div
           style={{
@@ -47,7 +49,7 @@ class TopSongs extends Component {
             borderRadius: 5,
           }}
         >
-          <SongList songs={this.state.topSongs} showPlatform />
+          <SongList songs={topSongs} showPlatform />
         </div>
       )
       : null
