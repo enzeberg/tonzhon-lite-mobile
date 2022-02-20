@@ -10,10 +10,8 @@ function TheHeader() {
     <Header
       style={{
         width: '100%',
-        height: '52px',
         zIndex: 2,
         textAlign: 'center',
-        padding: '8px',
         borderBottom: '0.5px solid #ccc',
       }}
     >
